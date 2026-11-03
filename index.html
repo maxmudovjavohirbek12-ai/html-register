@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Login/Signup Form</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0b0f19;
+            overflow: hidden;
+        }
+
+        .scene {
+            position: relative;
+            width: 380px;
+            height: 480px;
+            perspective: 1000px;
+        }
+
+        /* Neon ayllanuvchi fon doirasi */
+        .neon-ring {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, #00f2fe 90deg, transparent 130deg, transparent 180deg, #4facfe 270deg, transparent 360deg);
+            animation: ringRotate 3s linear infinite;
+            filter: drop-shadow(0 0 15px #00f2fe);
+            z-index: 1;
+        }
+
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .card-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        .card-container.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #131824;
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            backface-visibility: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-face.back {
+            transform: rotateY(180deg);
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        p {
+            color: #8a99ad;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            outline: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .input-box input:focus {
+            border-color: #00f2fe;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s transform, 0.3s box-shadow;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+        }
+
+        /* --- TUGMANI BOSGANDA ANİMATSIYA --- */
+        .btn.clicked {
+            transform: scale(0.95);
+            box-shadow: 0 0 25px #00f2fe;
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #8a99ad;
+            font-size: 0.85rem;
+        }
+
+        .switch-link span {
+            color: #00f2fe;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .switch-link span:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scene">
+        <div class="neon-ring"></div>
+
+        <div class="card-container" id="cardContainer">
+            
+            <!-- LOGIN SAHIFASI -->
+            <div class="card-face front">
+                <h2>Xush kelibsiz!</h2>
+                <p>Hisobingizga kirish uchun ma'lumotlarni kiriting</p>
+                
+                <div class="input-box">
+                    <input type="email" id="loginEmail" placeholder="Email manzil">
+                </div>
+                <div class="input-box">
+                    <input type="password" id="loginPass" placeholder="Parol">
+                </div>
+                
+                <button class="btn" id="loginBtn">Kirish</button>
+                
+                <div class="switch-link">
+                    Hisobingiz yo'qmi? <span id="toSignup">Ro'yxatdan o'tish</span>
+                </div>
+            </div>
+
+            <!-- SIGN UP SAHIFASI -->
+            <div class="card-face back">
+                <h2>Ro'yxatdan o'tish</h2>
+                <p>Yangi hisob yaratish uchun ma'lumotlarni kiriting</p>
+                
+                <div class="input-box">
+                    <input type="text" placeholder="F.I.O">
+                </div>
+                <div class="input-box">
+                    <input type="email" placeholder="Email manzil">
+                </div>
+                <div class="input-box">
+                    <input type="password" placeholder="Parol yarating">
+                </div>
+                
+                <button class="btn" id="signupBtn">Hisob yaratish</button>
+                
+                <div class="switch-link">
+                    Hisobingiz bormi? <span id="toLogin">Kirish</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const cardContainer = document.getElementById('cardContainer');
+        const toSignup = document.getElementById('toSignup');
+        const toLogin = document.getElementById('toLogin');
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+
+        // Sahifalarni aylantirish
+        toSignup.addEventListener('click', () => {
+            cardContainer.classList.add('flipped');
+        });
+
+        toLogin.addEventListener('click', () => {
+            cardContainer.classList.remove('flipped');
+        });
+
+        // "Kirish" tugmasi bosilganda chiroyli animatsiya va xabar
+        loginBtn.addEventListener('click', () => {
+            loginBtn.classList.add('clicked');
+            setTimeout(() => {
+                loginBtn.classList.remove('clicked');
+                alert("Muvaffaqiyatli kirildi!");
+            }, 300);
+        });
+
+        // "Hisob yaratish" tugmasi bosilganda animatsiya
+        signupBtn.addEventListener('click', () => {
+            signupBtn.classList.add('clicked');
+            setTimeout(() => {
+                signupBtn.classList.remove('clicked');
+                alert("Hisob muvaffaqiyatli yaratildi!");
+            }, 300);
+        });
+    </script>
+</body>
+</html>
